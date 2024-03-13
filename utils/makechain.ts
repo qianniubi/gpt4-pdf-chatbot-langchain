@@ -5,7 +5,7 @@ import { StringOutputParser } from 'langchain/schema/output_parser';
 import type { Document } from 'langchain/document';
 import type { VectorStoreRetriever } from 'langchain/vectorstores/base';
 
-const CONDENSE_TEMPLATE = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
+const CONDENSE_TEMPLATE = `给出下面的对话和一个后续问题，将后续问题改写为一个独立的问题。
 
 <chat_history>
   {chat_history}
@@ -14,9 +14,9 @@ const CONDENSE_TEMPLATE = `Given the following conversation and a follow up ques
 Follow Up Input: {question}
 Standalone question:`;
 
-const QA_TEMPLATE = `You are an expert researcher. Use the following pieces of context to answer the question at the end.
-If you don't know the answer, just say you don't know. DO NOT try to make up an answer.
-If the question is not related to the context or chat history, politely respond that you are tuned to only answer questions that are related to the context.
+const QA_TEMPLATE = `你是一位研究专家。使用以下上下文来回答最后的问题。 
+如果你不知道答案，就说你不知道。不要试图编造答案。 
+如果问题与上下文或聊天记录无关，请礼貌地回答您只会回答与上下文相关的问题。
 
 <context>
   {context}
