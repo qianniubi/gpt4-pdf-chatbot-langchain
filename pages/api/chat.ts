@@ -1,10 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { Document } from 'langchain/document';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+// import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { FireworksEmbeddings } from '@langchain/community/embeddings/fireworks';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { makeChain } from '@/utils/makechain';
 import { pinecone } from '@/utils/pinecone-client';
 import { PINECONE_INDEX_NAME, PINECONE_NAME_SPACE } from '@/config/pinecone';
+import { Embeddings } from 'langchain/dist/embeddings/base';
+
+function getEmbeddingsModel(): Embeddings {
+  // return new GoogleGenerativeAIEmbeddings({
+  //   apiKey: 'AIzaSyDdkCAcgBa-hSVTW7P-BKr5N41veJ9AmAk',
+  //   modelName: 'models/embedding-001', // 768 dimensions
+  //   taskType: TaskType.RETRIEVAL_DOCUMENT,
+  //   title: title
+  // });
+  return new FireworksEmbeddings({
+    apiKey: 'qXUeruxoW6RGlaYARLvfWRQUcRGylRhL2v8uxEEM0LXdO3qu'
+  }) as any as Embeddings;
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,7 +46,7 @@ export default async function handler(
 
     /* create vectorstore*/
     const vectorStore = await PineconeStore.fromExistingIndex(
-      new OpenAIEmbeddings({}),
+      getEmbeddingsModel(),
       {
         pineconeIndex: index,
         textKey: 'text',

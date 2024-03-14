@@ -25,27 +25,7 @@ export default function Home() {
   }>({
     messages: [
       {
-        message: 'Hi, what would you like to learn about this document?',
-        type: 'apiMessage',
-      },
-      {
-        type: 'userMessage',
-        message: 'I would like to know about the legal case of Roe v. Wade',
-      },
-      {
-        message: 'Sure, I can help with that. What would you like to know?',
-        type: 'apiMessage',
-      },
-      {
-        message: 'Hi, what would you like to learn about this document?',
-        type: 'apiMessage',
-      },
-      {
-        type: 'userMessage',
-        message: 'I would like to know about the legal case of Roe v. Wade',
-      },
-      {
-        message: 'Sure, I can help with that. What would you like to know?',
+        message: '欢迎和我聊天',
         type: 'apiMessage',
       },
     ],

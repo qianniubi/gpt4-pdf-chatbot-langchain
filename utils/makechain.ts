@@ -1,9 +1,11 @@
-import { ChatOpenAI } from 'langchain/chat_models/openai';
+// import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { ChatFireworks } from '@langchain/community/chat_models/fireworks';
 import { ChatPromptTemplate } from 'langchain/prompts';
 import { RunnableSequence } from 'langchain/schema/runnable';
 import { StringOutputParser } from 'langchain/schema/output_parser';
 import type { Document } from 'langchain/document';
 import type { VectorStoreRetriever } from 'langchain/vectorstores/base';
+import { BaseChatModel } from 'langchain/dist/chat_models/base';
 
 const CONDENSE_TEMPLATE = `给出下面的对话和一个后续问题，将后续问题改写为一个独立的问题。
 
@@ -27,7 +29,7 @@ const QA_TEMPLATE = `你是一位研究专家。使用以下上下文来回答�
 </chat_history>
 
 Question: {question}
-Helpful answer in markdown:`;
+请用简体中文回答:`;
 
 const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
   const serializedDocs = docs.map((doc) => doc.pageContent);
@@ -39,10 +41,17 @@ export const makeChain = (retriever: VectorStoreRetriever) => {
     ChatPromptTemplate.fromTemplate(CONDENSE_TEMPLATE);
   const answerPrompt = ChatPromptTemplate.fromTemplate(QA_TEMPLATE);
 
-  const model = new ChatOpenAI({
-    temperature: 0, // increase temperature to get more creative answers
-    modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
-  });
+  // const model = new ChatOpenAI({
+  //   temperature: 0, // increase temperature to get more creative answers
+  //   modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+  // });
+
+  const model = new ChatFireworks({
+    fireworksApiKey: 'DAPyAOmfu9KHaAzHb6fj7obIAbcnn274rkSJEPzhjlkXjVjH',
+    modelName: 'accounts/fireworks/models/mixtral-8x7b-instruct',
+    temperature: 0,
+    maxTokens: 20480
+  }) as any as BaseChatModel;
 
   // Rephrase the initial question into a dereferenced standalone question based on
   // the chat history to allow effective vectorstore querying.
