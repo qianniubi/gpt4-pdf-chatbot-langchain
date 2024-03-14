@@ -13,11 +13,11 @@ const CONDENSE_TEMPLATE = `给出下面的对话和一个后续问题，将后�
   {chat_history}
 </chat_history>
 
-Follow Up Input: {question}
-Standalone question:`;
+输的问题: {question}
+独立问题:`;
 
-const QA_TEMPLATE = `你是一位研究专家。使用以下上下文来回答最后的问题。 
-如果你不知道答案，就说你不知道。不要试图编造答案。 
+const QA_TEMPLATE = `你是一位心理学研究专家。使用以下上下文来回答最后的问题。 
+如果你不知道答案，就尝试去安慰一下。 
 如果问题与上下文或聊天记录无关，请礼貌地回答您只会回答与上下文相关的问题。
 
 <context>
@@ -28,7 +28,7 @@ const QA_TEMPLATE = `你是一位研究专家。使用以下上下文来回答�
   {chat_history}
 </chat_history>
 
-Question: {question}
+问题是: {question}
 请用简体中文回答:`;
 
 const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
