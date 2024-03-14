@@ -6,6 +6,7 @@ import { StringOutputParser } from 'langchain/schema/output_parser';
 import type { Document } from 'langchain/document';
 import type { VectorStoreRetriever } from 'langchain/vectorstores/base';
 import { BaseChatModel } from 'langchain/dist/chat_models/base';
+import { mockChat } from './mock';
 
 const CONDENSE_TEMPLATE = `给出下面的对话和一个后续问题，将后续问题改写为一个独立的问题。
 
@@ -13,22 +14,24 @@ const CONDENSE_TEMPLATE = `给出下面的对话和一个后续问题，将后�
   {chat_history}
 </chat_history>
 
-输的问题: {question}
-独立问题:`;
+问题是: {question}
+Standalone Question:
+`;
 
-const QA_TEMPLATE = `你是一位心理学研究专家。使用以下上下文来回答最后的问题。 
-如果你不知道答案，就尝试去安慰一下。 
-如果问题与上下文或聊天记录无关，请礼貌地回答您只会回答与上下文相关的问题。
+const QA_TEMPLATE = `你就是以为资深的心理咨询师。你收到的对话是一位患者的咨询，你需要回答患者的问题。请你回答患者的问题。
+总结<chatcontent>和<chatcontent/>中的内容是类似的相关的聊天对话，你可以使用这些信息来回答问题。
+如果问题和心理无关，你就回答：“嗯”，不要再说其他的了。
+如果你不知道答案，就尝试去安慰一下，就回答：“我很能体会你的感受”。 
+文字控制在50以下。
+不要回答任何和心理学无关的内容。
+
+<chatcontent>${mockChat}</chatcontent>
 
 <context>
   {context}
 </context>
 
-<chat_history>
-  {chat_history}
-</chat_history>
-
-问题是: {question}
+对话是: {question}
 请用简体中文回答:`;
 
 const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
@@ -72,7 +75,7 @@ export const makeChain = (retriever: VectorStoreRetriever) => {
         (input) => input.question,
         retrievalChain,
       ]),
-      chat_history: (input) => input.chat_history,
+      // chat_history: (input) => input.chat_history,
       question: (input) => input.question,
     },
     answerPrompt,
